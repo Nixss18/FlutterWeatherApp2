@@ -1,16 +1,26 @@
 import 'package:flutter/widgets.dart';
 import 'package:weather_app/api/weather.dart';
 
-class FavoriteCityProvider extends ChangeNotifier {
-  final List<String?> _cities = [];
+class FavoriteCityProvider with ChangeNotifier {
+  final List<FavoriteCity> _cities = [];
 
-  List<String> get cities => cities;
+  List<FavoriteCity> get cities => _cities;
 
-  void addFavoriteCity(String? city) {
+  void addFavoriteCity(FavoriteCity city) {
     _cities.add(city);
-    for (String city in cities) {
-      print(city);
-    }
     notifyListeners();
   }
+
+  void removeFavoriteCity(FavoriteCity city) {
+    _cities.remove(city);
+    notifyListeners();
+  }
+}
+
+class FavoriteCity {
+  double? lat;
+  double? lon;
+  String? name;
+
+  FavoriteCity(this.lat, this.lon, this.name);
 }

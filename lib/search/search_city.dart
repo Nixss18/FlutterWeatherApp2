@@ -62,11 +62,13 @@ class _SearchCityState extends State<SearchCity> {
 
                       double? lat = snapshot.data?[index].lat;
                       double? lon = snapshot.data?[index].lon;
+                      String? cityName = snapshot.data?[index].name;
 
                       // Navigator.of(context).push(MaterialPageRoute(
                       //     builder: (context) => const HomePage()));
                       saveCoords(lat!, lon!);
-                      Navigator.of(context).pop(SelectedCity(lat, lon));
+                      Navigator.of(context).pop(
+                          SelectedCity(lat: lat, lon: lon, cityName: cityName));
                     },
                   );
                 },
@@ -90,6 +92,7 @@ class _SearchCityState extends State<SearchCity> {
 class SelectedCity {
   final double? lat;
   final double? lon;
+  final String? cityName;
 
-  const SelectedCity(this.lat, this.lon);
+  const SelectedCity({this.lat, this.lon, this.cityName});
 }

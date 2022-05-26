@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/favorites/favorite_provide.dart';
+import 'package:weather_app/localizations/loaclization.dart';
 import 'package:weather_app/themes/prefs.dart';
 import 'package:weather_app/search/search_city.dart';
 import 'package:weather_app/views/daily_weather_page.dart';
@@ -12,6 +13,8 @@ import 'package:weather_app/themes/state_settings.dart';
 import 'package:weather_app/api/weather.dart';
 import 'package:weather_app/api/city.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // var options = BaseOptions(
 //   baseUrl: "https://api.openweathermap.org",
@@ -56,7 +59,6 @@ void main() async {
     ChangeNotifierProvider(create: (_) => FavoriteCityProvider()),
     ChangeNotifierProvider(create: (_) => StateSettings())
   ], child: MyApp()));
-  // ChangeNotifierProvider(create: (_) => StateSettings(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -66,9 +68,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isDarkMode = context.watch<StateSettings>().isEnabled;
     return MaterialApp(
-      // theme: ThemeData(fontFamily: 'Koulen')
-      //     .copyWith(appBarTheme: AppBarTheme(foregroundColor: Colors.white)),
       title: "Weather App",
+      locale: Locale('en', ''),
+      localizationsDelegates: const [
+        // AppLocalizations.delegate,
+        // GlobalMaterialLocalizations.delegate,
+        // GlobalWidgetsLocalizations.delegate,
+        // GlobalCupertinoLocalizations.delegate,
+        AppLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('lv', ''), Locale('en', '')],
       theme: ThemeData(
           brightness: isDarkMode ? Brightness.dark : Brightness.light),
       home: DailyWeatherPage(),
