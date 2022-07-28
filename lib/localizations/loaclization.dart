@@ -30,28 +30,32 @@ class AppLocalizations {
 
   static List<String> languages() => _localizedValues.keys.toList();
 
-  String get title {
-    return _localizedValues[locale.languageCode]!['weatherAppTitle']!;
-  }
+  // String get title {
+  //   return _localizedValues[locale.languageCode]!['weatherAppTitle']!;
+  // }
 
-  String get cityName {
-    return _localizedValues[locale.languageCode]!['cityName']!;
-  }
+  // String get cityName {
+  //   return _localizedValues[locale.languageCode]!['cityName']!;
+  // }
 
-  String get temperature {
-    return _localizedValues[locale.languageCode]!['temperature']!;
-  }
+  // String get temperature {
+  //   return _localizedValues[locale.languageCode]!['temperature']!;
+  // }
 
-  String get feelsLike {
-    return _localizedValues[locale.languageCode]!['feelsLike']!;
-  }
+  // String get feelsLike {
+  //   return _localizedValues[locale.languageCode]!['feelsLike']!;
+  // }
 
-  String get minTemp {
-    return _localizedValues[locale.languageCode]!['minTemp']!;
-  }
+  // String get minTemp {
+  //   return _localizedValues[locale.languageCode]!['minTemp']!;
+  // }
 
-  String get maxTemp {
-    return _localizedValues[locale.languageCode]!['maxTemp']!;
+  // String get maxTemp {
+  //   return _localizedValues[locale.languageCode]!['maxTemp']!;
+  // }
+
+  String getTranslations(String name) {
+    return _localizedValues[locale.languageCode]![name]!;
   }
 }
 

@@ -51,7 +51,7 @@ class _SecondScreenState extends State<SecondScreen> {
             future: futureWeeklyWeather,
             builder: (context, snapshot) {
               WeeklyWeather? weeklyWeather = snapshot.data;
-              print(weeklyWeather?.daily?.first.temp?.day);
+              // print(weeklyWeather?.daily?.first.temp?.day);
               if (snapshot.hasData) {
                 // return Text(
                 //     "${weeklyWeather?.daily?.first.weather?.first.description}");

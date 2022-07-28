@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather_app/localizations/loaclization.dart';
 import 'package:weather_app/themes/prefs.dart';
 import 'package:weather_app/themes/state_settings.dart';
 
@@ -12,18 +13,27 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool darkModeEnabled = false;
-  String dropdownValue = "Item 1";
+  String? dropdownValue = "lv";
 
   var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
+    'lv',
+    'en',
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    dropdownValue = Prefs.instance?.getString("Language") ?? "en";
+  }
+
+  void updateLanguageChoice(String? choice) {
+    context.read<StateSettings>().languageChanged(choice);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // print(AppLocalizations.of(context).locale);
     return Scaffold(
         appBar: AppBar(title: Text("Settings")),
         body: ListView(
@@ -42,26 +52,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             Card(
               child: ListTile(
-                title: Text("Switch language to latvian"),
-                // trailing: Switch(
-                //   value: latvianLanguageEnabled,
-                //   onChanged: (_) {},
-                // ),
+                title: Text("Switch language"),
                 trailing: DropdownButton(
-                  value: dropdownValue,
-                  icon: Icon(Icons.keyboard_arrow_down_outlined),
-                  items: items.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(items),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownValue = newValue!;
-                    });
-                  },
-                ),
+                    value: dropdownValue,
+                    icon: Icon(Icons.keyboard_arrow_down_outlined),
+                    items: items.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownValue = newValue;
+                      });
+                      updateLanguageChoice(newValue);
+                    }),
               ),
             )
           ],

@@ -12,6 +12,7 @@ import 'package:weather_app/search/search_city.dart';
 import 'package:weather_app/views/second_screen.dart';
 import 'package:weather_app/views/settings_view.dart';
 import 'package:weather_app/api/weather.dart';
+import '../database/DBProvider.dart';
 import '../localizations/loaclization.dart';
 import '../search/search_city.dart';
 
@@ -32,7 +33,8 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
   late AnimationController _controller;
   Alignment _dragAlignment = Alignment.center;
   CurrentWeather? _weatherData;
-
+  final dbHelper = DBProvider.instance;
+  List<FavoriteCity>? faveCities;
   @override
   void initState() {
     // TODO: implement initState
@@ -49,7 +51,8 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.title),
+        title: Text(
+            AppLocalizations.of(context).getTranslations("weatherAppTitle")),
         actions: [
           IconButton(
             icon: Icon(Icons.search),
@@ -75,7 +78,7 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
                   child: FutureBuilder<CurrentWeather>(
                     future: futureWeatherData,
                     builder: (context, snapshot) {
-                      print(snapshot.data?.iconList?.icons);
+                      // print(snapshot.data?.iconList?.icons);
                       CurrentWeather? weather = snapshot.data;
                       if (snapshot.hasData) {
                         return weatherData(weather!);
@@ -110,6 +113,15 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
                 if (coord != null) {
                   context.read<FavoriteCityProvider>().addFavoriteCity(
                       FavoriteCity(coord.lat, coord.lon, coord.cityName));
+                  faveCities = await DBProvider.instance.queryAllRows();
+                  _getInitialData();
+                  // context.read<DBProvider>().queryAllRows();
+                  // List<FavoriteCity>? cities =
+                  //     await DBProvider.instance.queryAllRows();
+                  // for (var c in cities ?? []) {
+                  //   print('City namn: ${c?.name}');
+                  // }
+                  // print(dbHelper.queryAllRows());
                 }
               },
             ),
@@ -120,7 +132,8 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  for (FavoriteCity city in provider.cities)
+                  for (FavoriteCity city in faveCities ?? [])
+                    // print(city.name);
                     ListTile(
                       title: Text(city.name ?? "no value"),
                       trailing: IconButton(
@@ -161,22 +174,22 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
             Image.network(
                 'http://openweathermap.org/img/wn/${_currentWeather.iconList!.icons!.first.iconName}@2x.png'),
           Text(
-            "${AppLocalizations.of(context)!.cityName}, ${_currentWeather.cityName}",
+            "${AppLocalizations.of(context).getTranslations("cityName")}, ${_currentWeather.cityName}",
             style: const TextStyle(fontFamily: 'Schyler', fontSize: 24),
           ),
           Text(
-            "${AppLocalizations.of(context)!.temperature}, ${_currentWeather.main?.temp}",
+            "${AppLocalizations.of(context).getTranslations("temperature")}, ${_currentWeather.main?.temp}",
             style: const TextStyle(fontFamily: 'Schyler', fontSize: 24),
           ),
           Text(
-            "${AppLocalizations.of(context)!.feelsLike}, ${_currentWeather.main?.feelsLike}",
+            "${AppLocalizations.of(context).getTranslations("feelsLike")}, ${_currentWeather.main?.feelsLike}",
             style: const TextStyle(fontFamily: 'Koulen', fontSize: 24),
           ),
           Text(
-              "${AppLocalizations.of(context)!.minTemp}, ${_currentWeather.main?.tempMin}",
+              "${AppLocalizations.of(context).getTranslations("minTemp")}, ${_currentWeather.main?.tempMin}",
               style: const TextStyle(fontFamily: 'Koulen', fontSize: 20)),
           Text(
-              "${AppLocalizations.of(context)!.minTemp} ${_currentWeather.main?.tempMax}",
+              "${AppLocalizations.of(context).getTranslations("minTemp")} ${_currentWeather.main?.tempMax}",
               style: const TextStyle(fontFamily: 'Koulen', fontSize: 20)),
         ],
       ),
@@ -208,10 +221,10 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
 
   Future<void> _reloadPage() async {
     if (gpsEnabled) {
-      print(gpsEnabled);
+      // print(gpsEnabled);
       _getWeatherByPosition();
     } else {
-      print(gpsEnabled);
+      // print(gpsEnabled);
       setState(() {
         _getCurrentWeather(lat!, lon!);
       });
@@ -223,7 +236,7 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
     setState(() {
       lat = prefs.getDouble("lat");
       lon = prefs.getDouble("lon");
-      print("LAT FROM PREFS ${lat}");
+      // print("LAT FROM PREFS ${lat}");
     });
   }
 
@@ -284,7 +297,7 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
         setState(() {
           gpsEnabled = false;
         });
-        print(e);
+        // print(e);
       }
     }
   }
@@ -309,12 +322,12 @@ class _DailyWeatherPageState extends State<DailyWeatherPage>
     }
   }
 
-  void _addCityToFavorites() async {
-    await _getValuesFromPrefs();
-    if (lat != null && lon != null) {
-      ListTile(
-        title: Text("${lat}"),
-      );
-    }
-  }
+  // void _addCityToFavorites() async {
+  //   await _getValuesFromPrefs();
+  //   if (lat != null && lon != null) {
+  //     ListTile(
+  //       title: Text("${lat}"),
+  //     );
+  //   }
+  // }
 }
